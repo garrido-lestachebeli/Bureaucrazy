@@ -1,4 +1,7 @@
 -- World data is loaded before anyone plays.
+-- A game owns its generated rules and the requests the player has judged.
+-- open_case is the single request currently on the desk. It is not history:
+-- reviewed_request requires both the player's decision and the real outcome.
 
 CREATE TABLE organization (
     organization_id INT NOT NULL AUTO_INCREMENT,

@@ -9,6 +9,7 @@ import pymysql
 from app.config import get_settings
 from app.database_setup import reset_database
 
+
 def main() -> None:
     settings = get_settings()
     try:
@@ -17,6 +18,7 @@ def main() -> None:
         message = exc.args[1] if len(exc.args) > 1 else str(exc)
         raise SystemExit(f"Could not set up MySQL: {message}") from exc
     print(f"Loaded {settings.mysql_database}.")
+
 
 if __name__ == "__main__":
     main()

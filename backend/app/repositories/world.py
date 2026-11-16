@@ -19,7 +19,6 @@ def fetch_catalog(conn) -> dict:
         assets = list(cur.fetchall())
         cur.execute("SELECT full_name FROM person ORDER BY person_id")
         people = list(cur.fetchall())
-    
     return {
         "organizations": organizations,
         "roles": roles,
@@ -81,5 +80,4 @@ def fetch_people(conn) -> list[dict]:
                 "employment": employment.get(person["person_id"], []),
             }
         )
-        
-    return profiles
+
