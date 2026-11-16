@@ -2,14 +2,15 @@
 
 You are the clerk. Each request is one sentence: "I want to work for The [organization] as a [role]." The applicant file and the posted rules come from MySQL. Approve people who meet every rule for that agency and that role. Deny the rest.
 
-The game is backed by a MySQL database that holds the world: agencies, roles, licenses, assets, applicants, and each applicant's licenses, assets, and work history. Python scripts create the database and load that data.
+The game is backed by a MySQL database. World tables hold agencies, roles, licenses, assets, applicants, and each applicant's licenses, assets, and work history. Game tables hold each game, the rules it posts, the request currently on the desk, and every request the player has judged. Python code creates the database, loads the world data, and reads it back.
 
 ## Layout
 
-- `database/schema.sql` — the world tables
-- `database/seed_world.sql` — agencies, roles, licenses, assets, and applicants
-- `backend/app` — Python package. `config.py` reads `.env`, `db.py` opens connections, and `database_setup.py` rebuilds the database from the SQL files.
+- `database/schema.sql` — world tables, game tables, and the open case on the desk
+- `database/seed_world.sql` — agencies, roles, licenses, assets, applicants, and requirement types
+- `backend/app` — Python package. `config.py` reads `.env`, `db.py` opens connections, and `database_setup.py` rebuilds the database from the SQL files. SQL lives in `repositories`.
 - `scripts/init_db.py` — creates the database and loads the world data
+- `scripts/start_dev_mysql.ps1` — starts a second MySQL server on port 3307
 
 ## Setup
 
@@ -29,3 +30,13 @@ python scripts\init_db.py
 ```
 
 `init_db.py` drops and recreates the database named in `MYSQL_DATABASE`, so only point it at a database that can be thrown away. The name must start with `bureaucrazy`.
+
+## If the course MySQL login is rejected
+
+Root on port 3306 may require a password this repo does not store. A second server on port 3307 leaves the MySQL80 service alone:
+
+```powershell
+.\scripts\start_dev_mysql.ps1
+```
+
+Set `MYSQL_PORT=3307` and leave `MYSQL_PASSWORD` empty in `.env`, then run `python scripts\init_db.py` once. The data directory lives under your temp folder, so start that script again after a reboot.
