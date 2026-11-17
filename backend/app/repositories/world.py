@@ -1,9 +1,6 @@
 from datetime import date, datetime
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 def as_date(value):
     if value is None:
         return None
@@ -11,10 +8,7 @@ def as_date(value):
         return value.date()
     return value
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 def fetch_catalog(conn) -> dict:
     with conn.cursor() as cur:
         cur.execute("SELECT organization_id, name FROM organization ORDER BY organization_id")
@@ -35,10 +29,7 @@ def fetch_catalog(conn) -> dict:
         "people": people,
     }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 def fetch_people(conn) -> list[dict]:
     with conn.cursor() as cur:
         cur.execute("SELECT person_id, full_name, age FROM person ORDER BY person_id")
@@ -92,8 +83,4 @@ def fetch_people(conn) -> list[dict]:
                 "employment": employment.get(person["person_id"], []),
             }
         )
-<<<<<<< HEAD
     return profiles
-=======
-
->>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
