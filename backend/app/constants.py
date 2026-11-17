@@ -1,0 +1,1 @@
+CASES_PER_DAY = 5
