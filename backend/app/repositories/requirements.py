@@ -4,7 +4,10 @@ def requirement_type_map(conn) -> dict[str, int]:
         rows = cur.fetchall()
     return {row["code"]: row["requirement_type_id"] for row in rows}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 def insert_requirement(conn, game_id: int, spec: dict, type_ids: dict[str, int]) -> int:
     with conn.cursor() as cur:
         cur.execute(
@@ -15,6 +18,7 @@ def insert_requirement(conn, game_id: int, spec: dict, type_ids: dict[str, int])
                 detail, parent_requirement_id
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
+<<<<<<< HEAD
             (
                 game_id,
                 spec["organization_id"],
@@ -26,6 +30,11 @@ def insert_requirement(conn, game_id: int, spec: dict, type_ids: dict[str, int])
                 spec["history_organization_id"],
                 spec.get("detail"),
                 spec.get("parent_requirement_id"),
+=======
+            (game_id,spec["organization_id"],spec["role_id"],type_ids[spec["code"]],spec["minimum_value"],
+                spec["asset_type_id"],spec["certification_id"],spec["history_organization_id"],
+                spec.get("detail"),spec.get("parent_requirement_id"),
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
             ),
         )
         new_id = cur.lastrowid
@@ -37,7 +46,10 @@ def insert_requirement(conn, game_id: int, spec: dict, type_ids: dict[str, int])
         insert_requirement(conn, game_id, alternate, type_ids)
     return new_id
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 def list_requirements(conn, game_id: int) -> list[dict]:
     with conn.cursor() as cur:
         cur.execute(

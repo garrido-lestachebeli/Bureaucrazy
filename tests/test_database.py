@@ -1,11 +1,17 @@
+<<<<<<< HEAD
 from datetime import date
 
+=======
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 import pymysql
 import pytest
 
 from app.db import connection
 from app.repositories.world import fetch_catalog, fetch_people
+<<<<<<< HEAD
 from app.services.qualification import evaluate_all
+=======
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 
 
 def test_known_applicants_and_referential_checks(database):
@@ -13,13 +19,17 @@ def test_known_applicants_and_referential_checks(database):
         people = {person["full_name"]: person for person in fetch_people(conn)}
         catalog = fetch_catalog(conn)
         marisol = people["Marisol Vega"]
+<<<<<<< HEAD
         lena = people["Lena Cho"]
+=======
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
         felix = people["Felix Navarro"]
         assert marisol["age"] == 52
         assert len(marisol["employment"]) == 2
         assert felix["age"] == 19
         assert felix["employment"] == []
         assert felix["certification_ids"] == set()
+<<<<<<< HEAD
 
         notary = next(item for item in catalog["certifications"] if item["name"] == "Notary")
         requirements = [
@@ -35,6 +45,10 @@ def test_known_applicants_and_referential_checks(database):
         assert qualified is False
         assert len(failed) == 1
         assert "10 years" in failed[0]
+=======
+        assert len(catalog["organizations"]) == 8
+        assert len(catalog["roles"]) == 8
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
 
         with conn.cursor() as cur:
             with pytest.raises(pymysql.err.OperationalError):

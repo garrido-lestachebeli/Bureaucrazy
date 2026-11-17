@@ -23,11 +23,15 @@ def insert_open_case(conn, game_id: int, draw: dict) -> None:
                 game_id, organization_id, role_id, person_id, selection_band
             ) VALUES (%s, %s, %s, %s, %s)
             """,
+<<<<<<< HEAD
             (
                 game_id,
                 draw["organization_id"],
                 draw["role_id"],
                 draw["person"]["person_id"],
+=======
+            (game_id,draw["organization_id"],draw["role_id"],draw["person"]["person_id"],
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
                 draw["selection_band"],
             ),
         )
@@ -49,6 +53,7 @@ def insert_reviewed_request(conn, row: dict) -> int:
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
+<<<<<<< HEAD
                 row["game_id"],
                 row["day_number"],
                 row["organization_id"],
@@ -58,6 +63,11 @@ def insert_reviewed_request(conn, row: dict) -> int:
                 row["player_decision"],
                 row["actual_outcome"],
                 1 if row["decision_correct"] else 0,
+=======
+                row["game_id"],row["day_number"],row["organization_id"],row["role_id"],
+                row["person_id"],row["selection_band"],row["player_decision"],
+                row["actual_outcome"],1 if row["decision_correct"] else 0,
+>>>>>>> 49213216522404a652c6196f1b9dc65bc7089432
                 row["outcome_detail"],
             ),
         )
