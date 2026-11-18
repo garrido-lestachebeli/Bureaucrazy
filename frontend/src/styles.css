@@ -1,0 +1,263 @@
+:root {
+  color: #1c2430;
+  background: #7f9488;
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #8ea397 0%, #6f8478 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h2,
+h3 {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 650;
+}
+
+.office {
+  min-height: 100vh;
+  padding: 0 1rem 2.5rem;
+}
+
+.topbar {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 0.25rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  color: #f6f1e4;
+}
+
+.brand {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  letter-spacing: 0.06em;
+  line-height: 0.9;
+  margin: 0;
+  font-weight: 650;
+}
+
+.form-code {
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5c5348;
+  margin-bottom: 0.35rem;
+}
+
+.form-code.light {
+  color: rgba(246, 241, 228, 0.75);
+}
+
+.tally {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+}
+
+.tally li,
+.tally.single {
+  border: 1px solid rgba(246, 241, 228, 0.45);
+  padding: 0.3rem 0.55rem;
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+
+.desk-frame {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.1rem;
+  background: #6d5340;
+  border-radius: 4px;
+}
+
+.title-frame {
+  margin-top: 8vh;
+  max-width: 720px;
+}
+
+.sheet {
+  background: #f6f1e4;
+  border: 1px solid #d9d0bc;
+  padding: 1.35rem 1.35rem 1.2rem;
+}
+
+.title-sheet h1 {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(3rem, 8vw, 4.6rem);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  margin-bottom: 0.2rem;
+}
+
+.lede {
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  margin-bottom: 1rem;
+}
+
+.kicker {
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: #6a5f52;
+  margin-bottom: 0.35rem;
+}
+
+.request-sheet {
+  margin-bottom: 1rem;
+}
+
+.sentence {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.25rem);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.sentence.small {
+  font-size: 1.45rem;
+  margin: 1rem 0 1.2rem;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.empty {
+  color: #6a5f52;
+  font-style: italic;
+}
+
+.rules {
+  margin-bottom: 0.2rem;
+  padding-left: 1.1rem;
+}
+
+.stamp-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.stamp {
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 4px solid;
+  border-radius: 6px;
+  padding: 0.75rem 1.1rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.stamp.approve {
+  color: #1e6b45;
+  border-color: #1e6b45;
+}
+
+.stamp.deny {
+  color: #8f2d2d;
+  border-color: #8f2d2d;
+}
+
+.stamp:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.stamp:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+
+.text-button {
+  background: none;
+  border: 0;
+  color: #f6f1e4;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.4rem 0.2rem;
+  margin-top: 0.6rem;
+}
+
+.error {
+  color: #f6d0d0;
+  margin-bottom: 0;
+}
+
+.verdict-mark {
+  display: inline-block;
+  border: 6px solid;
+  padding: 0.35rem 0.75rem;
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+}
+
+.verdict-mark.ok {
+  color: #1e6b45;
+  border-color: #1e6b45;
+}
+
+.verdict-mark.bad {
+  color: #8f2d2d;
+  border-color: #8f2d2d;
+}
+
+.day-close {
+  margin-top: 1.2rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed #c4b49a;
+}
+
+@media (max-width: 800px) {
+  .columns,
+  .topbar {
+    display: block;
+  }
+
+  .tally {
+    justify-content: flex-start;
+    margin-top: 0.8rem;
+  }
+
+  .title-frame {
+    margin-top: 1.5rem;
+  }
+}

@@ -13,6 +13,7 @@ The game is backed by a MySQL database. World tables hold agencies, roles, licen
 - `database/schema.sql` — world tables, game tables, and the open case on the desk
 - `database/seed_world.sql` — agencies, roles, licenses, assets, applicants, and requirement types
 - `backend/app` — FastAPI service. SQL lives in `repositories`. Rules live in `services`. Routes live in `routers`.
+- `frontend` — Vite + React desk
 - `tests` — rule checks, and database checks against a separate test database
 - `scripts/init_db.py` — creates the database and loads the world data
 - `scripts/start_dev_mysql.ps1` — starts a second MySQL server on port 3307
@@ -36,14 +37,22 @@ python scripts\init_db.py
 
 `init_db.py` drops and recreates the database named in `MYSQL_DATABASE`, so only point it at a database that can be thrown away. The name must start with `bureaucrazy`.
 
-Start the API:
+Start the API and the desk in two terminals:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 uvicorn app.main:app --reload --app-dir backend --port 8001
 ```
 
-Port 8000 is left alone because other local programs often use it. Interactive API docs are at http://127.0.0.1:8001/docs.
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open http://127.0.0.1:5173. The page calls `/api`, and Vite forwards that to port 8001. Port 8000 is left alone because other local programs often use it. If you start uvicorn on a different port, set that same port in `frontend/vite.config.js`.
+
+Interactive API docs are at http://127.0.0.1:8001/docs.
 
 | Method | Path | Purpose |
 | --- | --- | --- |
