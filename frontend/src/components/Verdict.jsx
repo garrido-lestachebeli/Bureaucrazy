@@ -1,5 +1,10 @@
 export default function Verdict({ verdict, busy, error, onContinue }) {
   const qualified = verdict.actual_outcome === "qualified";
+  const status = verdict.game.status;
+  let nextLabel = "Next request";
+  if (verdict.day_complete && status === "active") {
+    nextLabel = "Open the next day";
+  }
 
   return (
     <>
@@ -32,13 +37,23 @@ export default function Verdict({ verdict, busy, error, onContinue }) {
           {verdict.day_complete && (
             <section className="day-close">
               <h2>Day {verdict.day_number} is closed</h2>
-              <p>Mistakes on the log: {verdict.mistakes_on_day}.</p>
+              <p>
+                Mistakes on the log: {verdict.mistakes_on_day}. Allowed:{" "}
+                {verdict.game.mistakes_allowed}.
+              </p>
+              {status === "lost" && <p>That is over the limit. Turn in your stamp.</p>}
             </section>
           )}
           <div className="stamp-row">
-            <button className="stamp approve" type="button" disabled={busy} onClick={onContinue}>
-              {verdict.day_complete ? "Back to the lobby" : "Next request"}
-            </button>
+            {status === "active" ? (
+              <button className="stamp approve" type="button" disabled={busy} onClick={onContinue}>
+                {nextLabel}
+              </button>
+            ) : (
+              <button className="stamp deny" type="button" onClick={onContinue}>
+                Start another week
+              </button>
+            )}
           </div>
           {error && <p className="error">{error}</p>}
         </article>

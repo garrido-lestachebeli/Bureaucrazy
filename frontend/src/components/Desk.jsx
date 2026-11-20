@@ -30,7 +30,9 @@ export default function Desk({ game, caseFile, busy, error, onDecide, onLeave })
           <li>
             Request {requestNumber} of {game.cases_per_day}
           </li>
-          <li>Mistakes {game.mistakes_today}</li>
+          <li>
+            Mistakes {game.mistakes_today} of {game.mistakes_allowed}
+          </li>
         </ul>
       </header>
       <main className="desk-frame">

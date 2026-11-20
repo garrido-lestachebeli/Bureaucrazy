@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from app.db import connection
 from app.errors import GameError
-from app.services.gameplay import game_state, get_case, start_game, submit_decision
+from app.services.gameplay import game_state, get_case, history, start_game, submit_decision
 
 router = APIRouter()
 
@@ -50,3 +50,8 @@ def read_case(game_id: int):
 @router.post("/games/{game_id}/decision")
 def decide(game_id: int, body: DecisionBody):
     return _call(lambda conn: submit_decision(conn, game_id, body.decision))
+
+
+@router.get("/games/{game_id}/history")
+def read_history(game_id: int):
+    return _call(lambda conn: history(conn, game_id))

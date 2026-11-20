@@ -45,7 +45,7 @@ export default function App() {
   }
 
   async function continuePlay() {
-    if (verdict.day_complete) {
+    if (game.status !== "active") {
       setScreen("title");
       return;
     }

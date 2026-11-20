@@ -5,6 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.db import connection
+from app.repositories.requirements import list_requirements
 from app.repositories.world import fetch_catalog, fetch_people
 from app.services.qualification import evaluate_all
 
@@ -91,7 +92,7 @@ def _force_impossible_age(game_id):
             )
 
 
-def test_case_hides_the_answer_and_records_each_decision(client):
+def test_case_hides_the_answer_and_bad_approvals_lose_the_day(client):
     created = client.post("/api/games")
     assert created.status_code == 201
     game_id = created.json()["game_id"]
@@ -109,6 +110,9 @@ def test_case_hides_the_answer_and_records_each_decision(client):
         folder = body["rule_folder"]
         assert len(folder["organizations"]) == 8
         assert len(folder["roles"]) == 8
+        org_names = [sheet["name"] for sheet in folder["organizations"]]
+        assert org_names == sorted(org_names)
+        assert all("applies" not in sheet for sheet in folder["organizations"] + folder["roles"])
         decision = client.post(
             f"/api/games/{game_id}/decision",
             json={"decision": "approve"},
@@ -120,4 +124,60 @@ def test_case_hides_the_answer_and_records_each_decision(client):
 
     assert payload["day_complete"] is True
     assert payload["mistakes_on_day"] == 5
-    assert client.get(f"/api/games/{game_id}/case").status_code == 409
+    assert payload["game"]["status"] == "lost"
+    assert payload["game"]["current_day"] == 1
+
+
+def test_a_clean_day_advances_and_keeps_the_old_outcome(client):
+    created = client.post("/api/games")
+    game_id = created.json()["game_id"]
+    _force_impossible_age(game_id)
+
+    payload = None
+    for _ in range(5):
+        case = client.get(f"/api/games/{game_id}/case")
+        assert case.status_code == 200
+        decision = client.post(f"/api/games/{game_id}/decision", json={"decision": "deny"})
+        payload = decision.json()
+        assert payload["correct"] is True
+
+    assert payload["advanced"] is True
+    assert payload["game"]["status"] == "active"
+    assert payload["game"]["current_day"] == 2
+    assert client.get(f"/api/games/{game_id}/case").status_code == 200
+
+    history = client.get(f"/api/games/{game_id}/history")
+    day_one = [row for row in history.json()["requests"] if row["day_number"] == 1]
+    assert len(day_one) == 5
+    assert all(row["decision_correct"] for row in day_one)
+    assert all("200" in (row["outcome_detail"] or "") for row in day_one)
+
+
+def test_correct_days_keep_the_desk_open(client):
+    created = client.post("/api/games")
+    game_id = created.json()["game_id"]
+    payload = None
+    for _ in range(25):
+        case = client.get(f"/api/games/{game_id}/case")
+        assert case.status_code == 200
+        body = case.json()
+        with connection() as conn:
+            people = {person["person_id"]: person for person in fetch_people(conn)}
+            requirements = list_requirements(conn, game_id)
+        person = people[body["applicant"]["person_id"]]
+        applicable = [
+            req
+            for req in requirements
+            if req["organization_id"] == body["organization"]["organization_id"]
+            or req["role_id"] == body["role"]["role_id"]
+        ]
+        qualified, _failed = evaluate_all(applicable, person)
+        choice = "approve" if qualified else "deny"
+        decision = client.post(f"/api/games/{game_id}/decision", json={"decision": choice})
+        assert decision.status_code == 200
+        payload = decision.json()
+        assert payload["correct"] is True
+
+    assert payload["game"]["status"] == "active"
+    assert payload["day_number"] == 5
+    assert payload["game"]["current_day"] == 6

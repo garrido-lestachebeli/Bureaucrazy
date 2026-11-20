@@ -2,7 +2,7 @@
 
 You are the clerk. Each request is one sentence: "I want to work for The [organization] as a [role]." Use "an" when the role starts with a vowel. The applicant file and the posted rules come from MySQL. Approve people who meet every rule for that agency and that role. Deny the rest.
 
-A new game posts one requirement for every agency and every position. A day has 5 requests. Each decision is stored with the real outcome and the rules the applicant missed.
+A new game posts one requirement for every agency and every position. A day has 5 requests, and the game allows 1 mistake. Each decision is stored with the real outcome and the rules the applicant missed. If the incorrect decisions stored for that day are within the limit, the next day starts. Judged requests keep the outcome they had when you answered them. One mistake too many in a day, and the game is lost.
 
 Rules can ask for a minimum age, a license, a minimum number of an asset, past work at an agency, or a minimum number of years of work experience. Overlapping jobs count toward experience separately.
 
@@ -14,7 +14,7 @@ The game is backed by a MySQL database. World tables hold agencies, roles, licen
 - `database/seed_world.sql` — agencies, roles, licenses, assets, applicants, and requirement types
 - `backend/app` — FastAPI service. SQL lives in `repositories`. Rules live in `services`. Routes live in `routers`.
 - `frontend` — Vite + React desk
-- `tests` — rule checks, and database checks against a separate test database
+- `tests` — rule checks, the end-of-day count, and MySQL playthroughs
 - `scripts/init_db.py` — creates the database and loads the world data
 - `scripts/start_dev_mysql.ps1` — starts a second MySQL server on port 3307
 
@@ -61,6 +61,7 @@ Interactive API docs are at http://127.0.0.1:8001/docs.
 | GET | `/api/games/{id}` | Day, requests judged, and mistakes |
 | GET | `/api/games/{id}/case` | The request on the desk, the rule folder, and the applicant file |
 | POST | `/api/games/{id}/decision` | `{"decision": "approve"}` or `{"decision": "deny"}` |
+| GET | `/api/games/{id}/history` | Every judged request with its outcome |
 
 ## If the course MySQL login is rejected
 

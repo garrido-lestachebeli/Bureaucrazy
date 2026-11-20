@@ -2,13 +2,14 @@ import random
 
 from app.constants import CASES_PER_DAY
 from app.errors import GameError
-from app.repositories.games import insert_game, lock_game
+from app.repositories.games import insert_game, lock_game, update_game_progress
 from app.repositories.requests import (
     count_judged,
     count_mistakes,
     delete_open_case,
     insert_open_case,
     insert_reviewed_request,
+    list_history,
     lock_open_case,
 )
 from app.repositories.requirements import (
@@ -19,6 +20,7 @@ from app.repositories.requirements import (
 from app.repositories.world import fetch_catalog, fetch_people
 from app.services.applicants import draw_case, posting_pairs
 from app.services.generation import ALL_CODES, build_starting_requirements
+from app.services.penalty import day_should_continue
 from app.services.qualification import describe_requirement, evaluate_all
 
 
@@ -228,6 +230,14 @@ def submit_decision(conn, game_id: int, decision: str) -> dict:
 
     mistakes_on_day = count_mistakes(conn, game_id, judged_day)
     day_complete = count_judged(conn, game_id, judged_day) >= CASES_PER_DAY
+    advanced = False
+    if day_complete:
+        if not day_should_continue(mistakes_on_day, game["mistakes_allowed"]):
+            update_game_progress(conn, game_id, judged_day, "lost")
+        else:
+            next_day = judged_day + 1
+            advanced = True
+            update_game_progress(conn, game_id, next_day, "active")
 
     return {
         "correct": correct,
@@ -238,6 +248,13 @@ def submit_decision(conn, game_id: int, decision: str) -> dict:
         "failed_requirements": failed,
         "day_number": judged_day,
         "day_complete": day_complete,
+        "advanced": advanced,
         "mistakes_on_day": mistakes_on_day,
         "game": game_state(conn, game_id),
     }
+
+
+def history(conn, game_id: int) -> dict:
+    if not lock_game(conn, game_id):
+        raise GameError(404, "No such game.")
+    return {"requests": list_history(conn, game_id)}
